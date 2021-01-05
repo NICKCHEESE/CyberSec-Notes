@@ -1,0 +1,95 @@
+IPv4 Addresses
+	Has 32 bits, or 4 bytes
+	2^32 different combinations (4.3 billion)
+	192.168.1						.1
+		^ Network Portion		    ^ host portion
+		
+Class A network : Large networks
+	N.H.H.H
+	71.3.99.2
+	Network Address : 71.0.0.0
+	Broadcast Address : 71.255.255.255
+	Range : 1.0.0.0 - 127.255.255.255
+
+Class B network : Medium networks
+	N.N.H.H
+	155.8.101.33
+	Network Address : 155.8.0.0
+	Broadcast Address : 155.8.255.255
+	Range : 128.0.0.0 - 191.255.255.255
+	
+Class C network : Small networks
+	N.N.N.H
+	201.65.4.137
+	Network Address : 201.65.4.0
+	Broadcast Address : 201.65.4.255
+	Range : 192.0.0.0 - 223.255.255.255
+
+Class D network : Reserved for Multicasting
+	Range : 224.0.0.0 - 239.255.255.255
+	
+Class E network : Experimental, used for research
+	Range : 240.0.0.0 - 255.255.255.255
+	
+
+CIDR - Classless Inter-Domain Routing
+	
+	Class B Address
+	155.8.101.33 / 16 
+	^^^^^ - Network Portion (First 16 bits)
+	      ^^^^^^ - Host portion
+	Network Addresss : 155.8.0.0
+	Broadcast Address : 155.8.255.255
+	Range : 155.8.0.1 - 155.8.255.254
+	
+	Classless Address
+	155.8.101.33 / 21
+	^^^^^^^ - Network portion (First 21 bits)
+	       ^^^^^ - Host Portion
+	Network Address : 155.8.96.0
+	Broadcast Address : 155.8.103.255
+	Range : 155.8.96.1 - 155.8.103.254
+	
+Subnet Mask
+
+	/21 : 255.255.248.0 ( 11111111.11111111.11111000.00000000 )
+	
+Reserved IP Addresses
+
+	0.0.0.0 : Default route
+	255.255.255.255 : Default Broadcast
+	127.0.0.1/8 : Localhost (loopback)
+	169.254.0.0/16 : APIPA
+	
+	RFC 1918 : Defines three private network ranges
+		10.0.0.0/8 : 00001010:00000000:00000000:00000000
+		172.16.0.0/12 : 10101100.00010000.00000000.00000000
+		192.168.0.0/16 : 1011101110:10101000:00000000:00000000
+
+Network Address Translation : ( NAT ) 
+	Router changes Private IP addresses into Public IP addresses and vice versa
+	
+Fixed-Length Subnet Mask : ( FLSM ) (All subnets use same mask)
+	10.0.0.0/27 : Network 1
+	10.0.0.32/27 : Network 2
+	10.0.0.64/27 : Network 3 
+	
+	Request : Need 4 subnets. 3 Subnest need 5 IP addresses. 1 Subnet needs 11 IP addresses
+		
+			# of hosts | Mask |    Network ID    | Range of 'useful' addresses
+		#1  	11		 /28	  192.168.1.0       192.168.1.1-192.168.1.14
+		#2		5		 /28      192.168.1.16		192.168.1.17-192.168.1.30
+		#3		5		 /28	  192.168.1.32		192.168.1.33-192.168.1.46
+		#4		5		 /28 	  192.168.1.48		192.168.1.49-192.168.1.62
+		
+Variable-Length Subnet Mask : ( VLSM ) (All subnets use different masks)
+	
+	Request : Need 4 subnets. 3 Subnest need 5 IP addresses. 1 Subnet needs 11 IP addresses
+		
+			# of hosts | Mask |    Network ID    | Range of 'useful' addresses
+		#1  	11		 /28	  192.168.1.0       192.168.1.1-192.168.1.14
+		#2		5		 /29      192.168.1.16		192.168.1.17-192.168.1.22
+		#3		5		 /29	  192.168.1.23		192.168.1.25-192.168.1.30
+		#4		5		 /29 	  192.168.1.32		192.168.1.33-192.168.1.38
+
+

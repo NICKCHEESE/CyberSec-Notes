@@ -1,0 +1,365 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en-US">
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Informix SQL Injection Cheat Sheet | pentestmonkey</title>
+<link rel="stylesheet" href="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/style.css" type="text/css" media="screen" />
+<link rel="pingback" href="http://pentestmonkey.net/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Feed" href="http://pentestmonkey.net/feed" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Comments Feed" href="http://pentestmonkey.net/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="pentestmonkey &raquo; Informix SQL Injection Cheat Sheet Comments Feed" href="http://pentestmonkey.net/cheat-sheet/sql-injection/informix-sql-injection-cheat-sheet/feed" />
+<script type='text/javascript' src='http://pentestmonkey.net/wp-includes/js/l10n.js?ver=20101110'></script>
+<script type='text/javascript' src='http://pentestmonkey.net/wp-includes/js/jquery/jquery.js?ver=1.6.1'></script>
+<script type='text/javascript' src='http://pentestmonkey.net/wp-content/themes/baza-noclegowa/js/jquery.ddmenu.js?ver=3.2.1'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://pentestmonkey.net/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://pentestmonkey.net/wp-includes/wlwmanifest.xml" /> 
+<link rel='index' title='pentestmonkey' href='http://pentestmonkey.net' />
+<link rel='start' title='A Penetration Testing Site' href='http://pentestmonkey.net/site-news/a-penetration-testing-site' />
+<link rel='prev' title='unix-privesc-check Update: v1.3' href='http://pentestmonkey.net/blog/unix-privesc-check-update-1-3' />
+<link rel='next' title='unix-privesc-check Update: v1.4' href='http://pentestmonkey.net/blog/unix-privesc-check-update-1-4' />
+<meta name="generator" content="WordPress 3.2.1" />
+<link rel='canonical' href='http://pentestmonkey.net/cheat-sheet/sql-injection/informix-sql-injection-cheat-sheet' />
+<link rel='shortlink' href='http://pentestmonkey.net/?p=89' />
+<!--[if lte IE 7]><link href="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/ie.css" rel="stylesheet" media="screen" type="text/css" /><![endif]-->	
+<!--[if IE 6]><script src="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/js/DD_belatedPNG.js"></script><![endif]-->
+</head>
+<body class="single single-post postid-89 single-format-standard">
+	<div class="all-page">
+		
+		<div class="container">
+			
+			<!-- HEADER -->
+			<div id="header">
+			    <div class="website-name"><a href="http://pentestmonkey.net/">pentestmonkey</a></div>
+				<div class="slogan">Taking the monkey work out of pentesting</div>
+			</div>
+			<!-- /HEADER -->
+
+			<!-- main NAVIGATION -->
+			<div id="mainNav">
+				<div class="wrap">
+    <div class="menu-cheat-sheets-container"><ul id="menu-cheat-sheets" class="menu"><li id="menu-item-133" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-133"><a href="http://pentestmonkey.net/category/site-news"><span>Site News</span></a></li>
+<li id="menu-item-130" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-130"><a href="http://pentestmonkey.net/category/blog"><span>Blog</span></a></li>
+<li id="menu-item-136" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-136"><a href="http://pentestmonkey.net/category/tools"><span>Tools</span></a></li>
+<li id="menu-item-137" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-137"><a href="http://pentestmonkey.net/category/yaptest"><span>Yaptest</span></a></li>
+<li id="menu-item-134" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-134"><a href="http://pentestmonkey.net/category/cheat-sheet"><span>Cheat Sheets</span></a></li>
+<li id="menu-item-135" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-135"><a href="http://pentestmonkey.net/category/contact"><span>Contact</span></a></li>
+</ul></div>				</div>
+			</div>
+			<!-- /main NAVIGATION -->
+			<div class="clear"></div>
+
+
+			<!-- CONTENT -->
+			<div id="content">
+
+	<!-- Start: Left Panel -->
+	<div class="content">
+
+	
+		<div class="post-89 post type-post status-publish format-standard hentry category-sql-injection tag-cheatsheet tag-database tag-informix" id="post-89">
+			<h1>Informix SQL Injection Cheat Sheet</h1>
+
+			<div class="entryContent">
+				<p>Some useful syntax reminders for SQL Injection into Informix databases&#8230;</p>
+<p><span id="more-89"></span></p>
+<p>Below are some tabulated notes on how to do many of thing you&#8217;d normally do via SQL injection.  All tests were performed on Informix Dynamic Server Express Edition 11.5 for Windows.  The Informix download page is <a href="http://www.ibm.com/developerworks/downloads/im/dsexp/?S_TACT=105AGX11&amp;S_CMP=LP">here</a>.</p>
+<p>This post is part of series of SQL Injection Cheat Sheets.  In this series, I&#8217;ve endevoured to tabulate the data to make it easier to read and to use the same table for for each database backend.  This helps to highlight any features which are lacking for each database, and enumeration techniques that don&#8217;t apply and also areas that I haven&#8217;t got round to researching yet.</p>
+<p>The complete list of SQL Injection Cheat Sheets I&#8217;m working is:</p>
+<ul>
+<li><a href="http://pentestmonkey.net/blog/oracle-sql-injection-cheat-sheet/">Oracle</a></li>
+<li><a href="http://pentestmonkey.net/blog/mssql-sql-injection-cheat-sheet/">MSSQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/mysql-sql-injection-cheat-sheet/">MySQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/postgres-sql-injection-cheat-sheet/">PostgreSQL</a></li>
+<li><a href="http://pentestmonkey.net/blog/ingres-sql-injection-cheat-sheet/">Ingres</a></li>
+<li><a href="http://pentestmonkey.net/blog/db2-sql-injection-cheat-sheet/">DB2</a></li>
+<li><a href="http://pentestmonkey.net/blog/informix-sql-injection-cheat-sheet/">Informix</a></li>
+</ul>
+<p>I&#8217;m not planning to write one for MS Access, but there&#8217;s a great <a href="http://nibblesec.org/files/MSAccessSQLi/MSAccessSQLi.html">MS Access Cheat Sheet here</a>.</p>
+<table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>SELECT DBINFO(&#8216;version&#8217;, &#8216;full&#8217;) FROM systables WHERE tabid = 1;<br />
+SELECT DBINFO(&#8216;version&#8217;, &#8216;server-type&#8217;) FROM systables WHERE tabid = 1;<br />
+SELECT DBINFO(&#8216;version&#8217;, &#8216;major&#8217;), DBINFO(&#8216;version&#8217;, &#8216;minor&#8217;), DBINFO(&#8216;version&#8217;, &#8216;level&#8217;) FROM systables WHERE tabid = 1;<br />
+SELECT DBINFO(&#8216;version&#8217;, &#8216;os&#8217;) FROM systables WHERE tabid = 1; &#8212; T=Windows, U=32 bit app on 32-bit Unix, H=32-bit app running on 64-bit Unix, F=64-bit app running on 64-bit unix</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>select 1 FROM systables WHERE tabid = 1; &#8212; comment</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>SELECT USER FROM systables WHERE tabid = 1;<br />
+select CURRENT_ROLE FROM systables WHERE tabid = 1;</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>select username, usertype, password from sysusers;</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>select tabname, grantor, grantee, tabauth FROM systabauth join systables on systables.tabid = systabauth.tabid; &#8212; which tables are accessible by which users<br />
+select procname, owner, grantor, grantee from sysprocauth join sysprocedures on sysprocauth.procid = sysprocedures.procid; &#8212; which procedures are accessible by which users</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>SELECT DBSERVERNAME FROM systables where tabid = 1; &#8212; server name</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>select name, owner from sysdatabases;</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>select tabname, colname, owner, coltype FROM syscolumns join systables on syscolumns.tabid = systables.tabid;</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>select tabname, owner FROM systables;<br />
+select tabname, viewtext FROM sysviews  join systables on systables.tabid = sysviews.tabid;</td>
+</tr>
+<tr>
+<td>List Stored Procedures</td>
+<td>select procname, owner FROM sysprocedures;</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>select tabname, colname, owner, coltype FROM syscolumns join systables on syscolumns.tabid = systables.tabid where colname like &#8216;%pass%&#8217;;</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>select first 1 tabid from (select first 10 tabid from systables order by tabid) as sq order by tabid desc; &#8212; selects the 10th row</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT SUBSTRING(&#8216;ABCD&#8217; FROM 3 FOR 1) FROM systables where tabid = 1; &#8212; returns &#8216;C&#8217;</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>select bitand(6, 1) from systables where tabid = 1; &#8212; returns 0<br />
+select bitand(6, 2) from systables where tabid = 1; &#8212; returns 2</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>select ascii(&#8216;A&#8217;) from systables where tabid = 1;</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>select cast(&#8217;123&#8242; as integer) from systables where tabid = 1;<br />
+select cast(1 as char) from systables where tabid = 1;</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT &#8216;A&#8217; || &#8216;B&#8217; FROM systables where tabid = 1; &#8212; returns &#8216;AB&#8217;<br />
+SELECT concat(&#8216;A&#8217;, &#8216;B&#8217;) FROM systables where tabid = 1; &#8212; returns &#8216;AB&#8217;</td>
+</tr>
+<tr>
+<td>String Length</td>
+<td>SELECT tabname, length(tabname), char_length(tabname), octet_length(tabname) from systables;</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>select tabid, case when tabid&gt;10 then &#8220;High&#8221; else &#8216;Low&#8217; end from systables;</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT DBINFO(&#8216;dbhostname&#8217;) FROM systables WHERE tabid = 1; &#8212; hostname</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>These are the system databases:<br />
+sysmaster<br />
+sysadmin*<br />
+sysuser*<br />
+sysutils*</td>
+</tr>
+</tbody>
+</table>
+<p>* = don&#8217;t seem to contain anything / don&#8217;t allow readingInstalling Locally</p>
+<p>You can download <a href="http://www.ibm.com/developerworks/downloads/im/dsexp/?S_TACT=105AGX11&amp;S_CMP=LP">Informix Dynamic Server Express Edition 11.5 Trial</a> for Linux and Windows.</p>
+<p>Database ClientThere&#8217;s a <a href="http://www14.software.ibm.com/webapp/download/search.jsp?rs=ifxdl">database client SDK</a> available, but I couldn&#8217;t get the demo client working.<br />
+I used <a href="http://squirrel-sql.sourceforge.net/">SQuirreL SQL Client Version 2.6.8</a> after installing the <a href="http://www14.software.ibm.com/webapp/download/search.jsp?go=y&amp;rs=ifxjdbc">Informix JDBC drivers</a> (&#8220;emerge dev-java/jdbc-informix&#8221; on Gentoo).Logging in from command line</p>
+<p>If you get local admin rights on a Windows box and have a GUI logon:</p>
+<ul>
+<li>Click: Start | All Programs | IBM Informix Dynamic Server 11.50 | someservername.  This will give you a command prompt with various Environment variables set properly.</li>
+<li>Run dbaccess.exe from your command prompt.  This will bring up a text-based GUI that allows you to browse databases.</li>
+</ul>
+<p>The following were set on my test system.  This may help if you get command line access, but can&#8217;t get a GUI &#8211; you&#8217;ll need to change &#8220;testservername&#8221;:</p>
+<pre>set INFORMIXDIR=C:PROGRA~1IBMIBMINF~111.50
+set INFORMIXSERVER=testservername
+set ONCONFIG=ONCONFIG.testservername
+set PATH=C:PROGRA~1IBMIBMINF~111.50bin;C:WINDOWSsystem32;C:WINDOWS;C:WINDOWSSystem32Wbem;C:PROGRA~1ibmgsk7bin;C:PROGRA~1ibmgsk7lib;C:Program FilesIBMInformixClien-SDKbin;C:Program Filesibmgsk7bin;C:Program Filesibmgsk7lib
+set CLASSPATH=C:PROGRA~1IBMIBMINF~111.50extendkrakatoakrakatoa.jar;C:PROGRA~1IBMIBMINF~111.50xtendkrakatoajdbc.jar;
+set DBTEMP=C:PROGRA~1IBMIBMINF~111.50infxtmp
+set CLIENT_LOCALE=EN_US.CP1252
+set DB_LOCALE=EN_US.8859-1
+set SERVER_LOCALE=EN_US.CP1252
+set DBLANG=EN_US.CP1252
+mode con codepage select=1252</pre>
+<pre>Identifying on the network</pre>
+<p>My default installation listened on two TCP ports: 9088 and 9099.  When I created a new &#8220;server name&#8221;, this listened on 1526/TCP by default.  Nmap 4.76 didn&#8217;t identify these ports as Informix:</p>
+<p>$ sudo nmap -sS -sV 10.0.0.1 -p- -v &#8211;version-all<br />
+&#8230;<br />
+1526/tcp open  pdap-np?<br />
+9088/tcp open  unknown<br />
+9089/tcp open  unknown<br />
+&#8230;<br />
+TODO How would we identify Informix listening on the network?</p>
+<p>&nbsp;</p>
+                <div class="clear"></div>
+								<p>Tags: <a href="http://pentestmonkey.net/tag/cheatsheet" rel="tag">cheatsheet</a>, <a href="http://pentestmonkey.net/tag/database" rel="tag">database</a>, <a href="http://pentestmonkey.net/tag/informix" rel="tag">informix</a></p>				<p>Posted in <a href="http://pentestmonkey.net/category/cheat-sheet/sql-injection" title="View all posts in SQL Injection" rel="category tag">SQL Injection</a></p>
+				
+			</div>
+		</div>
+
+	
+<!-- You can start editing here. -->
+
+
+			<!-- If comments are open, but there are no comments. -->
+
+	 
+<p></p>
+<br />
+
+
+								
+
+
+
+
+	
+	</div>
+				<!-- sidebar -->
+				<div class="sideBar">
+					
+					<div class="nav">
+						<div class="bFrameT"><i></i></div>
+	<form method="get" id="searchform" action="http://pentestmonkey.net/" class="searchForm">
+	<p><input type="text" value="" name="s" id="s" class="field" />
+	<input type="image" src="http://pentestmonkey.net/wp-content/themes/baza-noclegowa/images/search.gif" alt="" title="Search" id="searchsubmit" class="btn" /></p>
+</form>
+<h3><span>Categories</span></h3>		<ul>
+	<li class="cat-item cat-item-5"><a href="http://pentestmonkey.net/category/blog" title="View all posts filed under Blog">Blog</a> (78)
+</li>
+	<li class="cat-item cat-item-39"><a href="http://pentestmonkey.net/category/cheat-sheet" title="View all posts filed under Cheat Sheets">Cheat Sheets</a> (10)
+<ul class='children'>
+	<li class="cat-item cat-item-40"><a href="http://pentestmonkey.net/category/cheat-sheet/shells" title="View all posts filed under Shells">Shells</a> (1)
+</li>
+	<li class="cat-item cat-item-8"><a href="http://pentestmonkey.net/category/cheat-sheet/sql-injection" title="View all posts filed under SQL Injection">SQL Injection</a> (7)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://pentestmonkey.net/category/contact" title="View all posts filed under Contact">Contact</a> (2)
+</li>
+	<li class="cat-item cat-item-3"><a href="http://pentestmonkey.net/category/site-news" title="View all posts filed under Site News">Site News</a> (3)
+</li>
+	<li class="cat-item cat-item-4"><a href="http://pentestmonkey.net/category/tools" title="View all posts filed under Tools">Tools</a> (17)
+<ul class='children'>
+	<li class="cat-item cat-item-14"><a href="http://pentestmonkey.net/category/tools/audit" title="View all posts filed under Audit">Audit</a> (3)
+</li>
+	<li class="cat-item cat-item-16"><a href="http://pentestmonkey.net/category/tools/misc" title="View all posts filed under Misc">Misc</a> (7)
+</li>
+	<li class="cat-item cat-item-13"><a href="http://pentestmonkey.net/category/tools/user-enumeration" title="View all posts filed under User Enumeration">User Enumeration</a> (4)
+</li>
+	<li class="cat-item cat-item-15"><a href="http://pentestmonkey.net/category/tools/web-shells" title="View all posts filed under Web Shells">Web Shells</a> (3)
+</li>
+</ul>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://pentestmonkey.net/category/uncategorized" title="View all posts filed under Uncategorized">Uncategorized</a> (3)
+</li>
+	<li class="cat-item cat-item-6"><a href="http://pentestmonkey.net/category/yaptest" title="View all posts filed under Yaptest">Yaptest</a> (15)
+<ul class='children'>
+	<li class="cat-item cat-item-12"><a href="http://pentestmonkey.net/category/yaptest/front-end" title="View all posts filed under Front End">Front End</a> (1)
+</li>
+	<li class="cat-item cat-item-9"><a href="http://pentestmonkey.net/category/yaptest/installing" title="View all posts filed under Installing">Installing</a> (2)
+</li>
+	<li class="cat-item cat-item-11"><a href="http://pentestmonkey.net/category/yaptest/overview" title="View all posts filed under Overview">Overview</a> (2)
+</li>
+	<li class="cat-item cat-item-10"><a href="http://pentestmonkey.net/category/yaptest/using" title="View all posts filed under Using">Using</a> (8)
+</li>
+</ul>
+</li>
+		</ul>
+<h3><span> <a href="/rss/" class="mainlevel-nav" rel="alternate" type="application/rss+xml"><img src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png" alt="" style="vertical-align:middle;border:0"/></a>&nbsp;<a href="/rss/" class="mainlevel-nav" rel="alternate" type="application/rss+xml">RSS Feed</a></p> <link rel="alternate" type="application/rss+xml" title="Pentestmonkey RSS Feed" href="/rss/" /> </span></h3>
+			
+						<div class="bFrameB"><i></i></div>
+					</div>
+					
+				</div>
+				<!-- /sidebar -->
+	
+				</div>
+				<!-- /content -->
+				
+			</div>
+			<!-- /CONTENT -->	
+			
+		
+		<!-- bottom NAVIGATION -->
+		<div id="bottomNav">
+		</div>
+		<!-- /bottom NAVIGATION -->
+		
+		<!-- FOOTER -->
+		<div id="footer">
+         <div class="menu"></div>
+			
+			
+		</div>
+		<!-- /FOOTER -->
+	</div>
+		
+
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2082472-1";
+urchinTracker();
+</script>
+
+</body>
+</html>
